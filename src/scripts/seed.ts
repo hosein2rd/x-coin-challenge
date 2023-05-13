@@ -6,8 +6,7 @@ import { Favorite } from "../models/Favorite";
 import { DBURL } from "../config";
 
 (async () => {
-
-  mongoose.connect(DBURL, {
+  await mongoose.connect(DBURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -19,12 +18,11 @@ import { DBURL } from "../config";
     divisa: `String`,
     prefered_cryptocurrency: `String`,
   });
+
   await profile.save();
 
-  const query = { _id: "6093abb3dfd9da1deeae56f2" };
-  const idProfile = await Profile.findOne(query).then((e) => {
-    return e?._id;
-  });
+  const query = { _id: profile._id };
+  const idProfile = await Profile.findOne(query).then((e) => e?._id);
 
   const simulator = new Simulator({
     profile_id: idProfile,
@@ -47,5 +45,5 @@ import { DBURL } from "../config";
   });
   await favorite.save();
 
-  mongoose.disconnect();
+  await mongoose.disconnect();
 })();
