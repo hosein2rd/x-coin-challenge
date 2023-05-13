@@ -1,16 +1,19 @@
-import express from "express";
+import { Router } from "express";
 import { Profile } from "../models/Profile";
+import statusCode from "../constants/statusCode";
+import { createProfileValidation } from "../validation";
+import validate from "../middlewares/validate";
 
-export var router = express.Router();
+export const router = Router();
 
-router.get("/api/profile", async (req, res) => {
-  var profile = await Profile.find().lean();
-  console.log(profile);
+router.get("/", async (req, res) => {
+  const profile = await Profile.find().lean();
+
   res.json({ profile });
 });
 
-router.post("/api/profile", async (req, res) => {
-  var { email, name, nickname } = req.body;
+router.post("/", createProfileValidation, validate, async (req, res) => {
+  const { email, name, nickname } = req.body;
 
   let profile = await Profile.findOne({
     $or: [{ email }, { nickname }],
@@ -20,5 +23,5 @@ router.post("/api/profile", async (req, res) => {
     profile = await Profile.create({ name, email, nickname });
   }
 
-  res.json(profile);
+  res.status(statusCode.HTTP_CREATED).json(profile);
 });

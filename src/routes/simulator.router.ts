@@ -1,36 +1,38 @@
-import express from "express";
 import { Router } from "express";
 import { Simulator } from "../models/Simulator";
-import cors from "cors";
+import statusCode from "../constants/statusCode";
+import validate from "../middlewares/validate";
+import { createSimulatorValidation } from "../validation";
 
-var app = express();
-app.use(cors());
+export const router = Router();
 
-export var router = express.Router();
-
-router.get("/api/simulator", async (req, res) => {
+router.get("/", async (req, res) => {
   var simulator = await Simulator.find().lean();
-  console.log(simulator);
+
   res.json({ simulator });
 });
 
-router.get("/api/simulator/:profile_id", async (req, res) => {
-  console.log("========== ");
-  let query = {};
-  var { profile_id } = req.params;
-  console.log({ profile_id });
-  query = { profile_id };
-  var data = await Simulator.find(query);
+router.get("/:profile_id", async (req, res) => {
+  const query = { profile_id: req.params.profile_id };
+  const data = await Simulator.find(query).lean();
+
   res.json(data);
 });
 
-router.post("/api/simulator/:profile_id", async (req, res) => {
-  var { profile_id } = req.params;
-  var newData = {
-    ...req.body,
-    profile_id,
-  };
-  console.log(newData);
-  var simulator = await Simulator.create(newData);
-  res.json(simulator);
-});
+router.post(
+  "/:profile_id",
+  createSimulatorValidation,
+  validate,
+  async (req, res) => {
+    const { profile_id } = req.params;
+
+    const newData = {
+      ...req.body,
+      profile_id,
+    };
+
+    const simulator = await Simulator.create(newData);
+
+    res.status(statusCode.HTTP_CREATED).json(simulator);
+  }
+);
