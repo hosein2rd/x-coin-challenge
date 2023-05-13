@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const schema = new Schema({
-  name: String,
+  name: { type: String, required: true },
   nickname: String,
-  email: String,
+  email: { type: String, required: true },
   capital: Number,
   divisa: String,
   prefered_cryptocurrency: String,
