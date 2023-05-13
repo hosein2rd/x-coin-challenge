@@ -6,7 +6,7 @@
 
 2. For maintaining the backend app we need logger. I used `winston` for this problem.
 
-3. There wasn't any error handling. If app will crashed there was no good error response for that. I added default express error handling.
+3. There wasn't any error handling. If the app crashes there was no appropriate error response for that. I added default express error handling.
 
 4. We need to validate input from request to protect our APIs. I used `express-validator`.
 
@@ -20,7 +20,7 @@ To add data in database run `npm run seed`.
 
 ### Production
 
-To run the app in production run `npm run build` for building after that run `npm run start` to run app.
+To run the app in production run `npm run build` for building. Then run `npm run start` to run the app.
 
 ### Development
 
