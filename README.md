@@ -14,6 +14,13 @@
 
 ## Quick Start
 
+First of all create `.env` file and add snippet code below:
+
+```m
+PORT=ADD_YOUR_PORT
+DBURL=ADD_YOUR_DB_URL
+```
+
 ### Seed
 
 To add data in database run `npm run seed`.
